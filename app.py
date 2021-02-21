@@ -115,20 +115,18 @@ def stats(start=None, end=None):
     session = Session(engine)
 
     if not end:
-        # calculate TMIN, TAVG, TMAX for dates greater than start
         query = session.query(*sel).\
             filter(Measurement.date >= start).all()
-        # Unravel results into a 1D array and convert to a list
+        # Unravel results
         temps = list(np.ravel(query))
         return jsonify(temps)
 
-    # calculate TMIN, TAVG, TMAX with start and stop
     query = session.query(*sel).\
         filter(Measurement.date >= start).\
         filter(Measurement.date <= end).all()
 
     session.close()
-    # Unravel results into a 1D array and convert to a list
+    
     temps = list(np.ravel(query))
     return jsonify(temps=temps)
 
